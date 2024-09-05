@@ -7,8 +7,8 @@ const eventSchema = new mongoose.Schema(
         location: { type: String, required: true },
         description: { type: String, required: true },
         img: { type: String, required: true },
-        attendees: [{ type: mongoose.Types.ObjectId, ref: "attendees" }],
-        createdBy: [{ type: mongoose.Types.ObjectId, ref: "users", required: true}]
+        attendees: [{ type: mongoose.Schema.Types.ObjectId, ref: "attendees" }],
+        createdBy: [{ type: mongoose.Schema.Types.ObjectId, ref: "users", required: true}]
     },
     {
         collection: "events"
