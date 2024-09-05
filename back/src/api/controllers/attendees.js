@@ -11,14 +11,15 @@ const getAttendees = async (req, res, next) => {
 
 const getAttendeeById = async (req, res, next) => {
     try {
-        const { email } = req.params
-        const attendee = await Attendee.findOne({email}).populate("events")
+        const { email } = req.params;
+        const attendee = await Attendee.findOne({ email }).populate("events");
         if (!attendee) {
-            return res.status(404).json({ message: "Asistente no encontrado" })
+            return res.status(404).json({ message: "Asistente no encontrado" });
         }
-        return res.status(200).json(attendee)
+        return res.status(200).json(attendee);
     } catch (error) {
-        return res.status(500).json({ message: "Error al encontrar al asistente", error })
+        console.error('Error al encontrar al asistente:', error);
+        return res.status(500).json({ message: "Error al encontrar al asistente", error });
     }
 }
 
