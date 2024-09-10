@@ -1,4 +1,5 @@
 const Attendee = require("../models/attendees")
+const User = require("../models/users")
 
 const getAttendees = async (req, res, next) => {
     try {
@@ -12,7 +13,9 @@ const getAttendees = async (req, res, next) => {
 const getAttendeeById = async (req, res, next) => {
     try {
         const { email } = req.params;
-        const attendee = await Attendee.findOne({ email }).populate("events");
+        const normalizedEmail = email.toLowerCase()
+        const attendee = await User.findOne({ email: normalizedEmail }).populate("events")
+
         if (!attendee) {
             return res.status(404).json({ message: "Asistente no encontrado" });
         }
@@ -26,7 +29,7 @@ const getAttendeeById = async (req, res, next) => {
 const confirmAttendance = async (req, res) => {
     try {        
         const { eventId } = req.params
-        let attendee = await Attendee.findOne({ email:req.user.email })
+        let attendee = await User.findOne({ email:req.user.email })
         if (!attendee) {
             attendee = new Attendee({ name: req.user.userName, email: req.user.email, events: [eventId] })
         } else {
