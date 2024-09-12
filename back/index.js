@@ -17,7 +17,12 @@ cloudinary.config({
 })
 
 app.use(express.json())
-app.use(cors())
+const corsOptions = {
+    origin: process.env.FRONTEND_URL || "https://project-10-front.vercel.app/", 
+    optionsSuccessStatus: 200
+  };
+  
+app.use(cors(corsOptions));
 
 connectDB()
 
