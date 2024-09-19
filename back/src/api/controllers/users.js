@@ -21,7 +21,7 @@ const registerUser = async (req, res, next) => {
         })
         const userExist = await User.findOne({email: req.body.email})
         if (userExist) {
-            return res.status(400).json("Este usuario ya existe")
+            return res.status(409).json("Este usuario ya existe")
         }
         const userSaved = await newUser.save()
         return res.status(201).json(userSaved)
@@ -34,10 +34,10 @@ const loginUser = async (req, res, next) => {
     try {
         const user = await User.findOne({email: req.body.email})
         if(!user){
-            return res.status(400).json("Usuario o contraseña incorrectos")
+            return res.status(400).json("Usuario no encontrado")
         }
         if(bcrypt.compareSync(req.body.password, user.password)){
-            const token = generateToken(user._id)
+            const token = generateToken(user._id)            
             return res.status(200).json({ user, token })
         }
         return res.status(400).json("Usuario o contraseña incorrectos")
