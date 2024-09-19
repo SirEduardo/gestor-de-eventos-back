@@ -59,8 +59,7 @@ const deleteAttendance = async (req, res, next) => {
         if (!email) {
             return res.status(400).json({ message: "Email del usuario no disponible" })
         }
-
-        let attendee = await Attendee.findOne({ email })
+        let attendee = await User.findOne({ email })
 
         if (!attendee) {
             return res.status(400).json({ message: "No se encontró al usuario" })
