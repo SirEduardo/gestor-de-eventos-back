@@ -1,5 +1,6 @@
 const { deleteFile } = require("../../utils/deleteFiles");
 const Event = require("../models/events");
+const User = require("../models/users");
 
 const getEvents = async (req, res, next) => {
   try {
@@ -60,10 +61,19 @@ const deleteEvent = async (req, res, next) => {
     if (event.createdBy.toString() !== userId) {
       return res.status(403).json({ message: "Otro usuario no puede eliminar este evento" });
     }
-
     const deletedEvent = await Event.findByIdAndDelete(id);
+
     deleteFile(deletedEvent.img);
-    return res.status(200).json(deletedEvent);
+
+    await User.updateMany(
+      { events: id },
+      { $pull: { events: id } }
+    )
+
+    return res.status(200).json({
+      message: "Evento eliminado con éxito",
+      event: deletedEvent
+    });
   } catch (error) {
     return res.status(400).json({ message: "Error al eliminar el evento" });
   }
