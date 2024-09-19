@@ -36,7 +36,7 @@ const loginUser = async (req, res, next) => {
         if(!user){
             return res.status(400).json("Usuario no encontrado")
         }
-        if(bcrypt.compareSync(req.body.password, user.password)){
+        if(bcrypt.compare(req.body.password, user.password)){
             const token = generateToken(user._id)            
             return res.status(200).json({ user, token })
         }
